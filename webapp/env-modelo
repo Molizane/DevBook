@@ -1,0 +1,4 @@
+API_URL=http://localhost:5000/api
+APP_PORT=3000
+HASH_KEY=4817d5e0acaae5d1e66df1d4a1b6dcad
+BLOCK_KEY=be376a8183b86616217bf8bfb0ec81be
