@@ -1,0 +1,70 @@
+﻿DevBook
++---api
+|      .env
+|      main.go
+|          <- config/config.go
+|          <- router/router.go
+|          main()
+|              <- config.Carregar()
+|              <- router.Gerar()
+|              <- config.Porta
+|              <- http.ListenAndServe()
+|
++------sql
+|          sql.sql
+|
+\------src
+    +------banco
+    |          banco.go
+    |              <- config/config.go
+    |              Conectar() <- config.Servidor, config.StringConexaoBanco
+    |
+    +------config
+    |          config.go
+    |              Servidor
+    |              StringConexaoBanco
+    |              Porta
+    |              Carregar() <- .env
+    |
+    +------controllers
+    |          usuario.go
+    |              <- banco/banco.go
+    |              <- modelos/usuario.go
+    |              <- repositorios/usuarios.go
+    |              <- respostas/respostas.go
+    |              CriarUsuario()
+    |              BuscarUsuarios()
+    |              BuscarUsuario()
+    |              AtualizarUsuario()
+    |              DeletarUsuario()
+    |
+    +------modelos
+    |          usuario.go
+    |              type Usuario struct
+    |                  Usuario.Preparar()
+    |                  Usuario.formatar()
+    |
+    +------repositorios
+    |          usuarios.go
+    |              <- modelos/usuario.go
+    |              type usuarios struct
+    |                  NovoRepositorioDeUsuarios()
+    |                  Criar()
+    |                  Buscar()
+    |                  BuscarPorID()
+    |
+    +------respostas
+    |          respostas.go
+    |              JSON()
+    |              Erro()
+    |
+    \---+--router
+        |      router.go
+        |          Gerar()
+        |
+        \------rotas
+                rotas.go
+                    type Rota struct
+                    Configurar()
+                usuarios.go
+                    rotasUsuarios[]

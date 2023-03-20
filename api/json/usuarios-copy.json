@@ -1,0 +1,26 @@
+[
+    {
+        "nome": "Benedito Angelo Molizane",
+        "nick": "Molizane",
+        "email": "molizane@gmail.com",
+        "senha": "123456"
+    },
+    {
+        "nome": "Maria de Fátima Moreira Molizane",
+        "nick": "Cocota",
+        "email": "fatimamolizane@gmail.com",
+        "senha": "123456"
+    },
+    {
+        "nome": "Amanda Moreira Molizane",
+        "nick": "Nandinha",
+        "email": "amanda.molizane@gmail.com",
+        "senha": "123456"
+    },
+    {
+        "nome": "Bianca Moreira Molizane",
+        "nick": "Bibi",
+        "email": "bianca.molizane@gmail.com",
+        "senha": "123456"
+    }
+]
