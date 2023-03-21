@@ -40,6 +40,11 @@ func CarregarPaginaPrincipal(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -84,6 +89,11 @@ func CarregarPaginaDeAtualizacaoDePublicacao(w http.ResponseWriter, r *http.Requ
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -113,6 +123,11 @@ func CarregarPaginaDeUsuarios(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}

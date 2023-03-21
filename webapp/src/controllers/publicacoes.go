@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"webapp/src/config"
 	"webapp/src/models"
 	"webapp/src/requisicoes"
@@ -33,6 +34,11 @@ func CriarPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, bytes.NewBuffer(publicacao))
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -62,6 +68,11 @@ func AlternarCurtirPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -98,6 +109,11 @@ func AlternarDescurtirPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -146,6 +162,11 @@ func AtualizarPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPut, url, bytes.NewBuffer(publicacao))
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -174,6 +195,11 @@ func ApagarPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodDelete, url, nil)
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}

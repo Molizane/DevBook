@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"webapp/src/config"
 	"webapp/src/cookies"
 	"webapp/src/requisicoes"
@@ -64,6 +65,11 @@ func PararDeSeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -94,6 +100,11 @@ func SeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -131,6 +142,11 @@ func EditarUsuario(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPut, url, bytes.NewBuffer(usuario))
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -167,6 +183,11 @@ func AtualizarSenha(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, bytes.NewBuffer(senhas))
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
@@ -191,6 +212,11 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodDelete, url, nil)
 
 	if erro != nil {
+		if strings.Contains(erro.Error(), "token expired") {
+			FazerLogout(w, r)
+			return
+		}
+
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
