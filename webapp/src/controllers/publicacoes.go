@@ -34,7 +34,7 @@ func CriarPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, bytes.NewBuffer(publicacao))
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -46,7 +46,7 @@ func CriarPublicacao(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -68,7 +68,7 @@ func AlternarCurtirPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -80,7 +80,7 @@ func AlternarCurtirPublicacao(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -109,7 +109,7 @@ func AlternarDescurtirPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -121,7 +121,7 @@ func AlternarDescurtirPublicacao(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -162,7 +162,7 @@ func AtualizarPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPut, url, bytes.NewBuffer(publicacao))
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -174,7 +174,7 @@ func AtualizarPublicacao(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -195,7 +195,7 @@ func ApagarPublicacao(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodDelete, url, nil)
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -207,7 +207,7 @@ func ApagarPublicacao(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 

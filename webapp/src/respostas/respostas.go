@@ -2,8 +2,11 @@ package respostas
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
+	"webapp/src/cookies"
 )
 
 // Erro representa a resposta de erro da API
@@ -24,8 +27,16 @@ func JSON(w http.ResponseWriter, statusCode int, dados interface{}) {
 }
 
 // TratarStatusCodeDeErro trata as requisições com status code 400 u superior
-func TratarStatusCodeDeErro(w http.ResponseWriter, r *http.Response) {
+func TratarStatusCodeDeErro(w http.ResponseWriter, res *http.Response, req *http.Request) {
 	var erro ErroAPI
-	json.NewDecoder(r.Body).Decode(&erro)
-	JSON(w, r.StatusCode, erro)
+	json.NewDecoder(res.Body).Decode(&erro)
+
+	if strings.Contains(erro.Erro, "expired") {
+		cookies.Deletar(w)
+		http.Redirect(w, req, "/login", http.StatusFound)
+		return
+	}
+
+	fmt.Println(erro.Erro)
+	JSON(w, res.StatusCode, erro)
 }

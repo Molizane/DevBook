@@ -42,7 +42,7 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -65,7 +65,7 @@ func PararDeSeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -77,7 +77,7 @@ func PararDeSeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -100,7 +100,7 @@ func SeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -112,7 +112,7 @@ func SeguirUsuario(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -142,7 +142,7 @@ func EditarUsuario(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPut, url, bytes.NewBuffer(usuario))
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -154,7 +154,7 @@ func EditarUsuario(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -183,7 +183,7 @@ func AtualizarSenha(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, bytes.NewBuffer(senhas))
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -195,7 +195,7 @@ func AtualizarSenha(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -212,7 +212,7 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodDelete, url, nil)
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -224,7 +224,7 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 

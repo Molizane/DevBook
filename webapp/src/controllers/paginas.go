@@ -40,7 +40,7 @@ func CarregarPaginaPrincipal(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -52,7 +52,7 @@ func CarregarPaginaPrincipal(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -89,7 +89,7 @@ func CarregarPaginaDeAtualizacaoDePublicacao(w http.ResponseWriter, r *http.Requ
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -101,7 +101,7 @@ func CarregarPaginaDeAtualizacaoDePublicacao(w http.ResponseWriter, r *http.Requ
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
@@ -123,7 +123,7 @@ func CarregarPaginaDeUsuarios(w http.ResponseWriter, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 
 	if erro != nil {
-		if strings.Contains(erro.Error(), "token expired") {
+		if strings.Contains(erro.Error(), "expired") {
 			FazerLogout(w, r)
 			return
 		}
@@ -135,7 +135,7 @@ func CarregarPaginaDeUsuarios(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		respostas.TratarStatusCodeDeErro(w, response)
+		respostas.TratarStatusCodeDeErro(w, response, r)
 		return
 	}
 
