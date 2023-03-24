@@ -19,7 +19,11 @@
                         <h5 class="card-title">Usuários encontrados</h5>
                         {{ range .}}
                         <p class="card-text">{{ .Nome }} - <a href="/usuarios/{{ .ID }}">{{ .Nick }}</a> - Membro desde:
-                            {{ .CriadoEm.Format "02/01/2006" }}</p>
+                            {{ .CriadoEm.Format "02/01/2006" }}
+                            {{ if(eq .Bloqueado 1)}}
+                            <span> (Bloqueado)</span>
+                            {{ end }}
+                            </p>
                         {{ else }}
                         <p class="card-text">Nenhum usuário encontrado.</p>
                         {{ end }}

@@ -21,7 +21,7 @@ var rotasUsuarios = []Rota{
 	{
 		URI:                "/api/usuarios/{usuarioId}",
 		Metodo:             http.MethodGet,
-		Funcao:             controllers.BuscarUsuario,
+		Funcao:             controllers.BuscarUsuarioPorId,
 		RequerAutenticacao: true,
 	},
 	{
@@ -64,6 +64,12 @@ var rotasUsuarios = []Rota{
 		URI:                "/api/usuarios/{usuarioId}/atualizar-senha",
 		Metodo:             http.MethodPost,
 		Funcao:             controllers.AtualizarSenha,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/api/usuarios/{usuarioId}/bloquear",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.BloquearSeguidor,
 		RequerAutenticacao: true,
 	},
 }

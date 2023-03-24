@@ -46,8 +46,12 @@ func (repositorio usuarios) Criar(usuario models.Usuario) (uint64, error) {
 func (repositorio usuarios) Buscar(nomeOuNick string) ([]models.Usuario, error) {
 	nomeOuNick = fmt.Sprintf("%%%s%%", nomeOuNick)
 
-	linhas, erro := repositorio.db.Query(
-		"SELECT id, nome, nick, email, criadoEm FROM usuarios WHERE nome like ? OR nick LIKE ? ORDER BY nome",
+	linhas, erro := repositorio.db.Query(`
+	    SELECT id, nome, nick, email, criadoEm
+		FROM usuarios
+		WHERE nome LIKE ?
+		   OR nick LIKE ?
+		ORDER BY nome`,
 		nomeOuNick, nomeOuNick,
 	)
 
@@ -80,8 +84,10 @@ func (repositorio usuarios) Buscar(nomeOuNick string) ([]models.Usuario, error) 
 
 // Buscar traz todos os usuários que atendem a um filtro de nome ou nick
 func (repositorio usuarios) BuscarPorID(ID uint64) (models.Usuario, error) {
-	linhas, erro := repositorio.db.Query(
-		"SELECT id, nome, nick, email, criadoEm FROM usuarios WHERE id = ?",
+	linhas, erro := repositorio.db.Query(`
+	    SELECT id, nome, nick, email, criadoEm
+		FROM usuarios
+		WHERE id = ?`,
 		ID,
 	)
 
@@ -110,9 +116,10 @@ func (repositorio usuarios) BuscarPorID(ID uint64) (models.Usuario, error) {
 
 // Atualizar altera as informações de um usuário no banco de dados
 func (repositorio usuarios) Atualizar(ID uint64, usuario models.Usuario) error {
-	statement, erro := repositorio.db.Prepare(
-		"UPDATE usuarios SET nome = ?, nick = ?, email = ? WHERE id = ?",
-	)
+	statement, erro := repositorio.db.Prepare(`
+	  UPDATE usuarios
+	  SET nome = ?, nick = ?, email = ?
+	  WHERE id = ?`)
 
 	if erro != nil {
 		return erro
@@ -164,7 +171,9 @@ func (repositorio usuarios) BuscarPorEmail(email string) (models.Usuario, error)
 
 // Seguir permite que um usuário siga outro
 func (repositorio usuarios) Seguir(usuarioID, seguidorID uint64) error {
-	statement, erro := repositorio.db.Prepare("insert ignore into seguidores (usuario_id, seguidor_id) values (?, ?)")
+	statement, erro := repositorio.db.Prepare(`
+	  INSERT IGNORE INTO seguidores (usuario_id, seguidor_id)
+	  VALUES (?, ?)`)
 
 	if erro != nil {
 		return erro
@@ -179,7 +188,11 @@ func (repositorio usuarios) Seguir(usuarioID, seguidorID uint64) error {
 
 // PararDeSeguir permite que um usuário deixe de siguir outro
 func (repositorio usuarios) PararDeSeguir(usuarioID, seguidorID uint64) error {
-	statement, erro := repositorio.db.Prepare("delete from seguidores where usuario_id = ? and seguidor_id =?")
+	statement, erro := repositorio.db.Prepare(`
+	  DELETE FROM seguidores
+	  WHERE usuario_id = ?
+	  AND seguidor_id = ?
+	  AND bloqueado = 0`)
 
 	if erro != nil {
 		return erro
@@ -195,7 +208,7 @@ func (repositorio usuarios) PararDeSeguir(usuarioID, seguidorID uint64) error {
 // BuscarSeguidores traz todos os seguidores do usuário
 func (repositorio usuarios) BuscarSeguidores(usuarioID uint64) ([]models.Usuario, error) {
 	linhas, erro := repositorio.db.Query(`
-		 SELECT DISTINCT u.id, u.nome, u.nick, u.email, u.criadoEm
+		 SELECT DISTINCT u.id, u.nome, u.nick, u.email, u.criadoEm, s.bloqueado
 		 FROM usuarios u
 		 INNER JOIN seguidores s
 		 ON s.seguidor_id = u.id
@@ -220,6 +233,7 @@ func (repositorio usuarios) BuscarSeguidores(usuarioID uint64) ([]models.Usuario
 			&usuario.Nick,
 			&usuario.Email,
 			&usuario.CriadoEm,
+			&usuario.Bloqueado,
 		); erro != nil {
 			return nil, erro
 		}
@@ -237,7 +251,8 @@ func (repositorio usuarios) BuscarSeguindo(usuarioID uint64) ([]models.Usuario, 
 		 FROM usuarios u
 		 INNER JOIN seguidores s
 		 ON s.usuario_id = u.id
-		 WHERE s.seguidor_id = ?`,
+		 WHERE s.seguidor_id = ?
+		 AND s.bloqueado = 0`,
 		usuarioID,
 	)
 
@@ -291,7 +306,7 @@ func (repositorio usuarios) BuscarSenha(usuarioID uint64) (string, error) {
 
 // AtualizarSenha atualiza a senha de um usuário pelo ID
 func (repositorio usuarios) AtualizarSenha(usuarioID uint64, senha string) error {
-	statement, erro := repositorio.db.Prepare("update usuarios set senha = ? where id = ?")
+	statement, erro := repositorio.db.Prepare("UPDATE usuarios SET senha = ? WHERE id = ?")
 
 	if erro != nil {
 		return erro
@@ -300,6 +315,25 @@ func (repositorio usuarios) AtualizarSenha(usuarioID uint64, senha string) error
 	defer statement.Close()
 
 	_, erro = statement.Exec(senha, usuarioID)
+
+	return erro
+}
+
+func (repositorio usuarios) Bloquear(usuarioID, seguidorID uint64) error {
+	statement, erro := repositorio.db.Prepare(
+		`UPDATE seguidores
+		 SET bloqueado = CASE bloqueado WHEN 1 THEN 0 ELSE 1 END
+		 WHERE usuario_id = ?
+		 AND seguidor_id = ?`,
+	)
+
+	if erro != nil {
+		return erro
+	}
+
+	defer statement.Close()
+
+	_, erro = statement.Exec(usuarioID, seguidorID)
 
 	return erro
 }

@@ -413,7 +413,7 @@ func DescurtirPublicacao(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	publicacao,erro := repositorio.Descurtir(publicacaoID, usuarioID)
+	publicacao, erro := repositorio.Descurtir(publicacaoID, usuarioID)
 
 	if erro != nil {
 		respostas.Erro(w, http.StatusInternalServerError, erro)
