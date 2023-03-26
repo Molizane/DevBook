@@ -17,7 +17,7 @@ type Usuario struct {
 	Email     string    `json:"email,omitempty"`
 	Senha     string    `json:"senha,omitempty"`
 	CriadoEm  time.Time `json:"CriadoEm,omitempty"`
-	Bloqueado uint8     `json:"Bloqueado,omitempty"`
+	Bloqueado uint8     `json:"bloqueado,omitempty"`
 }
 
 // Preparar faz ajustes no registro de usuário

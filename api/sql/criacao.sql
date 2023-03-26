@@ -24,17 +24,17 @@ CREATE TABLE usuarios
 
 CREATE TABLE seguidores
 (
-        seguidor_id int not null,
         usuario_id int not null,
+        seguidor_id int not null,
         desde timestamp DEFAULT current_timestamp() not null,
-        bloqueado bit(1) DEFAULT 0 not null,
+        bloqueado tinyint DEFAULT 0 not null,
         FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE,
         FOREIGN KEY (seguidor_id) REFERENCES usuarios (id) ON DELETE CASCADE,
-        PRIMARY KEY (seguidor_id, usuario_id)
+        PRIMARY KEY (usuario_id, seguidor_id)
 ) ENGINE = INNODB;
 
 CREATE UNIQUE INDEX idx_seguidores_usuario_seguidor
-ON seguidores (usuario_id, seguidor_id);
+ON seguidores (seguidor_id, usuario_id);
 
 CREATE TABLE publicacoes
 (
