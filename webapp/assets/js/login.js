@@ -13,6 +13,6 @@ function fazerLogin(evento) {
     }).done(function () { // 200, 201, 204
         window.location = '/home';
     }).fail(function (erro) { // 400 401 403 4094 500
-        Swal.fire("ERRO!", "Erro ao fazer login.", "error");
+        Swal.fire("ERRO!", `Erro ao fazer login:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
     });
 }

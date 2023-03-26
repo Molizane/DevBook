@@ -3,25 +3,25 @@ VALUES (
          "João da Silva",
          "Joao.Silva",
          "joao.silva@gmail.com",
-           "$2a$10$FSiEYryjCHcCmHhbUyTheuQWuP9iqOwbWHnbR6IM0H3fWsOVFcLY2" -- 123456
+           "$2a$10$FcaN997de/rpd9yAciHpqO4LoWdTdUyRQ4ZYZULJL6Iv/zhq/aO7q" -- 123456
        ),
        (
          "Maria de Souza",
          "Maria.Souza",
          "maria.souza@gmail.com",
-           "$2a$10$FSiEYryjCHcCmHhbUyTheuQWuP9iqOwbWHnbR6IM0H3fWsOVFcLY2"
+           "$2a$10$FcaN997de/rpd9yAciHpqO4LoWdTdUyRQ4ZYZULJL6Iv/zhq/aO7q"
        ),
        (
          "Manoela Cruz",
          "Manoela.Cruz",
          "manoela.cruz@gmail.com",
-           "$2a$10$FSiEYryjCHcCmHhbUyTheuQWuP9iqOwbWHnbR6IM0H3fWsOVFcLY2"
+           "$2a$10$FcaN997de/rpd9yAciHpqO4LoWdTdUyRQ4ZYZULJL6Iv/zhq/aO7q"
        ),
        (
          "Rute Santos",
          "Rute.Santos",
          "rute.santos@gmail.com",
-           "$2a$10$FSiEYryjCHcCmHhbUyTheuQWuP9iqOwbWHnbR6IM0H3fWsOVFcLY2"
+           "$2a$10$FcaN997de/rpd9yAciHpqO4LoWdTdUyRQ4ZYZULJL6Iv/zhq/aO7q"
        );
 
 INSERT IGNORE INTO publicacoes (titulo, conteudo, autor_id)

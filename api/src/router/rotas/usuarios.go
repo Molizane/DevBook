@@ -72,4 +72,10 @@ var rotasUsuarios = []Rota{
 		Funcao:             controllers.BloquearSeguidor,
 		RequerAutenticacao: true,
 	},
+	{
+		URI:                "/api/usuarios/{usuarioId}/desbloquear",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.DesbloquearSeguidor,
+		RequerAutenticacao: true,
+	},
 }

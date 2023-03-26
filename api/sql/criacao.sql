@@ -24,14 +24,17 @@ CREATE TABLE usuarios
 
 CREATE TABLE seguidores
 (
-        usuario_id int not null,
         seguidor_id int not null,
+        usuario_id int not null,
         desde timestamp DEFAULT current_timestamp() not null,
-        bloqueado tinyint DEFAULT 0 not null,
+        bloqueado bit(1) DEFAULT 0 not null,
         FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE,
         FOREIGN KEY (seguidor_id) REFERENCES usuarios (id) ON DELETE CASCADE,
-        PRIMARY KEY (usuario_id, seguidor_id)
+        PRIMARY KEY (seguidor_id, usuario_id)
 ) ENGINE = INNODB;
+
+CREATE UNIQUE INDEX idx_seguidores_usuario_seguidor
+ON seguidores (usuario_id, seguidor_id);
 
 CREATE TABLE publicacoes
 (
@@ -54,6 +57,9 @@ CREATE TABLE curtidas
         PRIMARY KEY (publicacao_id, usuario_id)
 ) ENGINE = INNODB;
 
+CREATE UNIQUE INDEX idx_curtidas_usuario_publicacao
+ON curtidas (usuario_id, publicacao_id);
+
 CREATE TABLE descurtidas
 (
         publicacao_id int not null,
@@ -63,3 +69,6 @@ CREATE TABLE descurtidas
         FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE,
         PRIMARY KEY (publicacao_id, usuario_id)
 ) ENGINE = INNODB;
+
+CREATE UNIQUE INDEX idx_descurtidas_usuario_publicacao
+ON descurtidas (usuario_id, publicacao_id);

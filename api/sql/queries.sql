@@ -2,7 +2,7 @@
 SELECT -- seguidor.id IdSeguidor,
        seguidor.Nome Seguidor,
        -- seguido.id IdSeguindo,
-       seguido.Nome Seguindo
+       seguindo.Nome Seguindo
 FROM seguidores s
 INNER JOIN usuarios seguindo
 ON seguindo.id = s.usuario_id

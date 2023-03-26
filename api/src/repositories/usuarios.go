@@ -322,7 +322,27 @@ func (repositorio usuarios) AtualizarSenha(usuarioID uint64, senha string) error
 func (repositorio usuarios) Bloquear(usuarioID, seguidorID uint64) error {
 	statement, erro := repositorio.db.Prepare(
 		`UPDATE seguidores
-		 SET bloqueado = CASE bloqueado WHEN 1 THEN 0 ELSE 1 END
+		 -- SET bloqueado = CASE bloqueado WHEN 1 THEN 0 ELSE 1 END
+		 SET bloqueado = 1
+		 WHERE usuario_id = ?
+		 AND seguidor_id = ?`,
+	)
+
+	if erro != nil {
+		return erro
+	}
+
+	defer statement.Close()
+
+	_, erro = statement.Exec(usuarioID, seguidorID)
+
+	return erro
+}
+
+func (repositorio usuarios) Desbloquear(usuarioID, seguidorID uint64) error {
+	statement, erro := repositorio.db.Prepare(
+		`UPDATE seguidores
+		 SET bloqueado = 0
 		 WHERE usuario_id = ?
 		 AND seguidor_id = ?`,
 	)
