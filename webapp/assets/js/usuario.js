@@ -15,8 +15,8 @@ function pararDeSeguir() {
         method: "POST"
     }).done(function () {
         window.location = `/usuarios/${usuarioId}`;
-    }).fail(function () {
-        Swal.fire("ERRO!", "Erro ao parar de seguir o usuário.", "error");
+    }).fail(function (erro) {
+        Swal.fire("ERRO!", `Erro ao parar de seguir o usuário:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
         $('#parar-de-seguir').this.prop('disabled', false);
     })
 }
@@ -32,8 +32,8 @@ function seguir() {
         method: "POST"
     }).done(function () {
         window.location = `/usuarios/${usuarioId}`;
-    }).fail(function () {
-        Swal.fire("ERRO!", "Erro ao seguir o usuário.", "error");
+    }).fail(function (erro) {
+        Swal.fire("ERRO!", `Erro ao seguir o usuário:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
         $('#seguir').this.prop('disabled', false);
     })
 }
@@ -54,8 +54,8 @@ function editar(evento) {
             .then(function () {
                 window.location = "/perfil"
             });
-    }).fail(function () {
-        Swal.fire("ERRO!", "Erro ao atualizar o usuário.", "error")
+    }).fail(function (erro) {
+        Swal.fire("ERRO!", `Erro ao atualizar o usuário:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
     });
 }
 
@@ -81,8 +81,8 @@ function atualizarSenha(evento) {
             .then(function () {
                 window.locate = "/perfil";
             });
-    }).fail(function () {
-        Swal.fire("ERRO!", "Erro ao alterar senha.", "error");
+    }).fail(function (erro) {
+        Swal.fire("ERRO!", `Erro ao alterar senha:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
     })
 }
 
@@ -103,8 +103,8 @@ function deletarUsuario(evento) {
                     .then(function () {
                         window.location = '/logout';
                     })
-            }).fail(function () {
-                Swal.fire("ERRO!", "ocorreu um erro ao excluir a conta", "error")
+            }).fail(function (erro) {
+                Swal.fire("ERRO!", `Erro ao excluir a conta:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
             });
         };
     });

@@ -33,7 +33,7 @@ function criarUsuario(evento) {
                         })
                 })
         }).fail(function (erro) { // 400 401 403 4094 500
-            Swal.fire("ERRO!", "Erro ao cadastrar o usuário.", "error");
+            Swal.fire("ERRO!", `Erro ao cadastrar o usuário:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
         });
     }
 }

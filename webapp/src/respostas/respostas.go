@@ -2,7 +2,6 @@ package respostas
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -37,6 +36,5 @@ func TratarStatusCodeDeErro(w http.ResponseWriter, res *http.Response, req *http
 		return
 	}
 
-	fmt.Println(erro.Erro)
 	JSON(w, res.StatusCode, erro)
 }

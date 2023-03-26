@@ -40,8 +40,8 @@ function criarPublicacao(evento) {
             .then(function () {
                 window.location = "/home";
             })
-    }).fail(function () {
-        Swal.fire("ERRO!", "Erro ao criar a Publicação.", "error");
+    }).fail(function (erro) {
+        Swal.fire("ERRO!", `Erro ao fazer Publicação:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
     })
 }
 
@@ -60,8 +60,9 @@ function curtirPublicacao(evento) {
         atualizarEngajamento(data);
     }).fail(function (erro) {
         Swal.fire("ERRO!", "Erro ao curtir Publicação.", "error");
-    }).always(function () {
+    }).always(function (erro) {
         elementoClicado.prop('disabled', false);
+        Swal.fire("ERRO!", `Erro ao curtir Publicação:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
     });
 }
 
@@ -78,8 +79,8 @@ function descurtirPublicacao(evento) {
         method: 'POST'
     }).done(function (data) {
         atualizarEngajamento(data);
-    }).fail(function () {
-        Swal.fire("ERRO!", "Erro ao descurtir Publicação.", "error");
+    }).fail(function (erro) {
+        Swal.fire("ERRO!", `Erro ao descurtir Publicação:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
     }).always(function () {
         elementoClicado.prop('disabled', false);
     });
@@ -107,8 +108,8 @@ function atualizarPublicacao(evento) {
             .then(function () {
                 window.location = "/home";
             })
-    }).fail(function () {
-        Swal.fire("ERRO!", "Erro ao editar Publicação.", "error");
+    }).fail(function (erro) {
+        Swal.fire("ERRO!", `Erro ao editar Publicação:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
     }).always(function () {
         $('#atualizar-publicacao').prop('disabled', false);
     })
@@ -145,9 +146,8 @@ function deletarPublicacao(evento) {
             publicacao.fadeOut("slow", function () {
                 $(this).remove();
             })
-        }).fail(function () {
-            Swal.fire("ERRO!", "Erro ao apagar Publicação.", "error");
+        }).fail(function (erro) {
+            Swal.fire("ERRO!", `Erro ao excluir Publicação:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
         })
     });
-
 }
