@@ -9,7 +9,6 @@ import (
 	"api/src/seguranca"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -47,8 +46,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(usuarioSalvoNoBanco.ID)
-	
 	if usuarioSalvoNoBanco.ID == 0 {
 		respostas.Erro(w, http.StatusUnauthorized, errors.New("usuário não existe"))
 		return
