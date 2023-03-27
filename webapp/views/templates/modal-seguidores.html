@@ -9,7 +9,7 @@
                 {{ range . }}
                 <a href="/usuarios/{{ .ID }}">{{ .Nick }}</a>
                 {{ if (eq .Bloqueado 1) }}
-                <i class="fa-solid fa-user-lock"></i>
+                <span> <i class="fa-solid fa-user-lock"></i></span>
                 {{ end }}
                 <br />
                 {{ else }}

@@ -230,3 +230,73 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
 
 	respostas.JSON(w, response.StatusCode, nil)
 }
+
+// BloquearUsuario bloqueia um usuário seguidor
+func BloquearUsuario(w http.ResponseWriter, r *http.Request) {
+	parametros := mux.Vars(r)
+
+	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
+
+	if erro != nil {
+		respostas.JSON(w, http.StatusBadRequest, respostas.ErroAPI{Erro: erro.Error()})
+		return
+	}
+
+	url := fmt.Sprintf("%s/usuarios/%d/bloquear", config.APIURL, usuarioID)
+
+	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
+
+	if erro != nil {
+		if strings.Contains(erro.Error(), "expired") {
+			FazerLogout(w, r)
+			return
+		}
+
+		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
+		return
+	}
+
+	defer response.Body.Close()
+
+	if response.StatusCode >= 400 {
+		respostas.TratarStatusCodeDeErro(w, response, r)
+		return
+	}
+
+	respostas.JSON(w, response.StatusCode, nil)
+}
+
+// DesbloquearUsuario desbloqueia um usuário seguidor
+func DesbloquearUsuario(w http.ResponseWriter, r *http.Request) {
+	parametros := mux.Vars(r)
+
+	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
+
+	if erro != nil {
+		respostas.JSON(w, http.StatusBadRequest, respostas.ErroAPI{Erro: erro.Error()})
+		return
+	}
+
+	url := fmt.Sprintf("%s/usuarios/%d/desbloquear", config.APIURL, usuarioID)
+
+	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodPost, url, nil)
+
+	if erro != nil {
+		if strings.Contains(erro.Error(), "expired") {
+			FazerLogout(w, r)
+			return
+		}
+
+		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
+		return
+	}
+
+	defer response.Body.Close()
+
+	if response.StatusCode >= 400 {
+		respostas.TratarStatusCodeDeErro(w, response, r)
+		return
+	}
+
+	respostas.JSON(w, response.StatusCode, nil)
+}

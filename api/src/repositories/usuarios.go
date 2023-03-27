@@ -206,14 +206,15 @@ func (repositorio usuarios) PararDeSeguir(usuarioID, seguidorID uint64) error {
 }
 
 // BuscarSeguidores traz todos os seguidores do usuário
-func (repositorio usuarios) BuscarSeguidores(usuarioID uint64) ([]models.Usuario, error) {
+func (repositorio usuarios) BuscarSeguidores(usuarioID, usuarioLogado uint64) ([]models.Usuario, error) {
 	linhas, erro := repositorio.db.Query(`
-		 SELECT DISTINCT u.id, u.nome, u.nick, u.email, u.criadoEm, s.bloqueado
+		 SELECT DISTINCT u.id, u.nome, u.nick, u.email, u.criadoEm,
+		        CASE WHEN ? = ? THEN s.bloqueado ELSE 0 END AS bloqueado
 		 FROM usuarios u
 		 INNER JOIN seguidores s
 		 ON s.seguidor_id = u.id
 		 WHERE s.usuario_id = ?`,
-		usuarioID,
+		usuarioID, usuarioLogado, usuarioID,
 	)
 
 	if erro != nil {

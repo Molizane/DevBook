@@ -78,4 +78,16 @@ var rotasUsuario = []Rota{
 		Funcao:             controllers.DeletarUsuario,
 		RequerAutenticacao: false,
 	},
+	{
+		URI:                "/usuarios/{usuarioId}/bloquear",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.BloquearUsuario,
+		RequerAutenticacao: false,
+	},
+	{
+		URI:                "/usuarios/{usuarioId}/desbloquear",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.DesbloquearUsuario,
+		RequerAutenticacao: false,
+	},
 }

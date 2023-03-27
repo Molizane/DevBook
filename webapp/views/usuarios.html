@@ -21,7 +21,7 @@
                         <p class="card-text">{{ .Nome }} - <a href="/usuarios/{{ .ID }}">{{ .Nick }}</a> - Membro desde:
                             {{ .CriadoEm.Format "02/01/2006" }}
                             {{ if(eq .Bloqueado 1)}}
-                            <span> (Bloqueado)</span>
+                            <span> <i class="fa-solid fa-user-lock"></i></span>
                             {{ end }}
                             </p>
                         {{ else }}

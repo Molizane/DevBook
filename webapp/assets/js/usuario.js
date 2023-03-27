@@ -3,9 +3,10 @@ $('#seguir').on('click', seguir)
 $('#editar-usuario').on('submit', editar)
 $('#atualizar-senha').on('submit', atualizarSenha)
 $('#deletar-usuario').on('click', deletarUsuario)
+$('#bloquear-usuario').on('click', bloquearUsuario)
+$('#desbloquear-usuario').on('click', desbloquearUsuario)
 
 function pararDeSeguir() {
-    console.log('pararDeSeguir()')
     const usuarioId = $(this).data('usuario-id');
 
     $(this).prop('disabled', true);
@@ -18,11 +19,10 @@ function pararDeSeguir() {
     }).fail(function (erro) {
         Swal.fire("ERRO!", `Erro ao parar de seguir o usuário:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
         $('#parar-de-seguir').this.prop('disabled', false);
-    })
+    });
 }
 
 function seguir() {
-    console.log('seguir()')
     const usuarioId = $(this).data('usuario-id');
 
     $(this).prop('disabled', true);
@@ -35,7 +35,7 @@ function seguir() {
     }).fail(function (erro) {
         Swal.fire("ERRO!", `Erro ao seguir o usuário:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
         $('#seguir').this.prop('disabled', false);
-    })
+    });
 }
 
 function editar(evento) {
@@ -107,5 +107,37 @@ function deletarUsuario(evento) {
                 Swal.fire("ERRO!", `Erro ao excluir a conta:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
             });
         };
+    });
+}
+
+function bloquearUsuario(evento) {
+    const usuarioId = $(this).data('usuario-id');
+
+    $(this).prop('disabled', true);
+
+    $.ajax({
+        url: `/usuarios/${usuarioId}/bloquear`,
+        method: "POST"
+    }).done(function () {
+        window.location = `/usuarios/${usuarioId}`;
+    }).fail(function (erro) {
+        Swal.fire("ERRO!", `Erro ao bloquear o usuário:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
+        $('#parar-de-seguir').this.prop('disabled', false);
+    });
+}
+
+function desbloquearUsuario(evento) {
+    const usuarioId = $(this).data('usuario-id');
+
+    $(this).prop('disabled', true);
+
+    $.ajax({
+        url: `/usuarios/${usuarioId}/desbloquear`,
+        method: "POST"
+    }).done(function () {
+        window.location = `/usuarios/${usuarioId}`;
+    }).fail(function (erro) {
+        Swal.fire("ERRO!", `Erro ao desbloquear o usuário:<br/><br/><b>${erro.responseJSON.erro}</b>`, "error");
+        $('#parar-de-seguir').this.prop('disabled', false);
     });
 }
