@@ -107,6 +107,7 @@ func BuscarSeguidores(canal chan<- []Usuario, usuarioID uint64, r *http.Request)
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 
 	if erro != nil {
+		fmt.Printf("Erro ao buscar seguidores (1): %s", erro.Error())
 		canal <- nil
 		return
 	}
@@ -116,6 +117,7 @@ func BuscarSeguidores(canal chan<- []Usuario, usuarioID uint64, r *http.Request)
 	var seguidores []Usuario
 
 	if erro = json.NewDecoder(response.Body).Decode(&seguidores); erro != nil {
+		fmt.Printf("Erro ao buscar seguidores (2): %s", erro.Error())
 		canal <- nil
 		return
 	}
@@ -133,6 +135,7 @@ func BuscarSeguindo(canal chan<- []Usuario, usuarioID uint64, r *http.Request) {
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 
 	if erro != nil {
+		fmt.Printf("Erro ao buscar seguindo (1): %s", erro.Error())
 		canal <- nil
 		return
 	}
@@ -142,6 +145,7 @@ func BuscarSeguindo(canal chan<- []Usuario, usuarioID uint64, r *http.Request) {
 	var seguindo []Usuario
 
 	if erro = json.NewDecoder(response.Body).Decode(&seguindo); erro != nil {
+		fmt.Printf("Erro ao buscar seguindo (2): %s", erro.Error())
 		canal <- nil
 		return
 	}
@@ -159,6 +163,7 @@ func BuscarPublicacoes(canal chan<- []Publicacao, usuarioID uint64, r *http.Requ
 	response, erro := requisicoes.FazerRequisicaoComAutenticacao(r, http.MethodGet, url, nil)
 
 	if erro != nil {
+		fmt.Printf("Erro ao buscar publicações (1): %s", erro.Error())
 		canal <- nil
 		return
 	}
@@ -168,6 +173,7 @@ func BuscarPublicacoes(canal chan<- []Publicacao, usuarioID uint64, r *http.Requ
 	var publicacoes []Publicacao
 
 	if erro = json.NewDecoder(response.Body).Decode(&publicacoes); erro != nil {
+		fmt.Printf("Erro ao buscar publicações (2): %s", erro.Error())
 		canal <- nil
 		return
 	}

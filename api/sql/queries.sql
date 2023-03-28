@@ -1,8 +1,9 @@
 -- Seguidor, Seguindo
-SELECT -- seguidor.id IdSeguidor,
+SELECT seguidor.id IdSeguidor,
        seguidor.Nome Seguidor,
-       -- seguido.id IdSeguindo,
-       seguindo.Nome Seguindo
+       seguindo.id IdSeguindo,
+       seguindo.Nome Seguindo,
+       s.bloqueado Bloqueado
 FROM seguidores s
 INNER JOIN usuarios seguindo
 ON seguindo.id = s.usuario_id

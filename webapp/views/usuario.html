@@ -19,10 +19,14 @@
     {{ end }}
     {{ end }}
 
-    {{ $segueUsuarioLogado := false }}
+    {{ $seguindoUsuarioLogado := false }}
+    {{ $usuarioBloqueado := false }}
     {{ range .Usuario.Seguindo }}
     {{ if (eq .ID $.UsuarioLogadoID) }}
-    {{ $segueUsuarioLogado = true }}
+    {{ $seguindoUsuarioLogado = true }}
+    {{ if (eq .Bloqueado 1) }}
+    {{ $usuarioBloqueado = true }}
+    {{ end }}
     {{ end }}
     {{ end }}
 
@@ -57,12 +61,12 @@
                             <button id="seguir" class="btn btn-info" data-usuario-id="{{ .Usuario.ID }}">Seguir</button>
                             {{ end }}
                         </a>
-                        {{ if $segueUsuarioLogado}}
+                        {{ if $seguindoUsuarioLogado }}
                         <a href="#" class="card-link">
-                            {{ if .Bloqueado }}
-                            <button id="desbloquear" class="btn btn-info" data-usuario-id="{{ .Usuario.ID }}">Desbloquear</button>
+                            {{ if $usuarioBloqueado }}
+                            <button id="desbloquear-usuario" class="btn btn-info" data-usuario-id="{{ .Usuario.ID }}">Desbloquear</button>
                             {{ else }}
-                            <button id="bloquear" class="btn btn-info" data-usuario-id="{{ .Usuario.ID }}">Bloquear</button>
+                            <button id="bloquear-usuario" class="btn btn-info" data-usuario-id="{{ .Usuario.ID }}">Bloquear</button>
                             {{ end }}
                         </a>
                         {{ end }}

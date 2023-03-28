@@ -234,7 +234,6 @@ func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
 // BloquearUsuario bloqueia um usuário seguidor
 func BloquearUsuario(w http.ResponseWriter, r *http.Request) {
 	parametros := mux.Vars(r)
-
 	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
 
 	if erro != nil {
@@ -269,7 +268,6 @@ func BloquearUsuario(w http.ResponseWriter, r *http.Request) {
 // DesbloquearUsuario desbloqueia um usuário seguidor
 func DesbloquearUsuario(w http.ResponseWriter, r *http.Request) {
 	parametros := mux.Vars(r)
-
 	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
 
 	if erro != nil {

@@ -210,9 +210,9 @@ func (repositorio usuarios) BuscarSeguidores(usuarioID, usuarioLogado uint64) ([
 	linhas, erro := repositorio.db.Query(`
 		 SELECT DISTINCT u.id, u.nome, u.nick, u.email, u.criadoEm,
 		        CASE WHEN ? = ? THEN s.bloqueado ELSE 0 END AS bloqueado
-		 FROM usuarios u
-		 INNER JOIN seguidores s
-		 ON s.seguidor_id = u.id
+		 FROM seguidores s
+		 INNER JOIN usuarios u
+		 ON u.id = s.seguidor_id
 		 WHERE s.usuario_id = ?`,
 		usuarioID, usuarioLogado, usuarioID,
 	)
@@ -246,15 +246,15 @@ func (repositorio usuarios) BuscarSeguidores(usuarioID, usuarioLogado uint64) ([
 }
 
 // BuscarSeguindo traz todos os usuários seguidos por um determinado usuário
-func (repositorio usuarios) BuscarSeguindo(usuarioID uint64) ([]models.Usuario, error) {
+func (repositorio usuarios) BuscarSeguindo(usuarioID, usuarioLogado uint64) ([]models.Usuario, error) {
 	linhas, erro := repositorio.db.Query(`
-		 SELECT DISTINCT u.id, u.nome, u.nick, u.email, u.criadoEm
-		 FROM usuarios u
-		 INNER JOIN seguidores s
-		 ON s.usuario_id = u.id
+		 SELECT DISTINCT u.id, u.nome, u.nick, u.email, u.criadoEm, s.bloqueado
+		 FROM seguidores s
+		 INNER JOIN usuarios u
+		 ON u.id = s.usuario_id
 		 WHERE s.seguidor_id = ?
-		 AND s.bloqueado = 0`,
-		usuarioID,
+		 AND (? <> ? OR s.bloqueado = 0)`,
+		usuarioID, usuarioID, usuarioLogado,
 	)
 
 	if erro != nil {
@@ -274,6 +274,7 @@ func (repositorio usuarios) BuscarSeguindo(usuarioID uint64) ([]models.Usuario, 
 			&usuario.Nick,
 			&usuario.Email,
 			&usuario.CriadoEm,
+			&usuario.Bloqueado,
 		); erro != nil {
 			return nil, erro
 		}
@@ -323,7 +324,6 @@ func (repositorio usuarios) AtualizarSenha(usuarioID uint64, senha string) error
 func (repositorio usuarios) Bloquear(usuarioID, seguidorID uint64) error {
 	statement, erro := repositorio.db.Prepare(
 		`UPDATE seguidores
-		 -- SET bloqueado = CASE bloqueado WHEN 1 THEN 0 ELSE 1 END
 		 SET bloqueado = 1
 		 WHERE usuario_id = ?
 		 AND seguidor_id = ?`,

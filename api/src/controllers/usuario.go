@@ -347,6 +347,13 @@ func BuscarSeguindo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	usuarioIDNoToken, erro := autenticacao.ExtrairUsuarioID(r)
+
+	if erro != nil {
+		respostas.Erro(w, http.StatusUnauthorized, erro)
+		return
+	}
+
 	db, erro := banco.Conectar()
 
 	if erro != nil {
@@ -357,7 +364,7 @@ func BuscarSeguindo(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	repositorio := repositories.NovoRepositorioDeUsuarios(db)
-	seguindo, erro := repositorio.BuscarSeguindo(usuarioID)
+	seguindo, erro := repositorio.BuscarSeguindo(usuarioID, usuarioIDNoToken)
 
 	if erro != nil {
 		respostas.Erro(w, http.StatusInternalServerError, erro)
@@ -442,18 +449,18 @@ func AtualizarSenha(w http.ResponseWriter, r *http.Request) {
 }
 
 func BloquearSeguidor(w http.ResponseWriter, r *http.Request) {
-	seguidorID, erro := autenticacao.ExtrairUsuarioID(r)
-
-	if erro != nil {
-		respostas.Erro(w, http.StatusUnauthorized, erro)
-		return
-	}
-
 	parametros := mux.Vars(r)
-	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
+	seguidorID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
 
 	if erro != nil {
 		respostas.Erro(w, http.StatusBadRequest, erro)
+		return
+	}
+
+	usuarioID, erro := autenticacao.ExtrairUsuarioID(r)
+
+	if erro != nil {
+		respostas.Erro(w, http.StatusUnauthorized, erro)
 		return
 	}
 
@@ -482,18 +489,18 @@ func BloquearSeguidor(w http.ResponseWriter, r *http.Request) {
 }
 
 func DesbloquearSeguidor(w http.ResponseWriter, r *http.Request) {
-	seguidorID, erro := autenticacao.ExtrairUsuarioID(r)
-
-	if erro != nil {
-		respostas.Erro(w, http.StatusUnauthorized, erro)
-		return
-	}
-
 	parametros := mux.Vars(r)
-	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
+	seguidorID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
 
 	if erro != nil {
 		respostas.Erro(w, http.StatusBadRequest, erro)
+		return
+	}
+
+	usuarioID, erro := autenticacao.ExtrairUsuarioID(r)
+
+	if erro != nil {
+		respostas.Erro(w, http.StatusUnauthorized, erro)
 		return
 	}
 

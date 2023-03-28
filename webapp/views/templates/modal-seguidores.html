@@ -7,11 +7,10 @@
             </div>
             <div class="modal-body">
                 {{ range . }}
-                <a href="/usuarios/{{ .ID }}">{{ .Nick }}</a>
                 {{ if (eq .Bloqueado 1) }}
                 <span> <i class="fa-solid fa-user-lock"></i></span>
                 {{ end }}
-                <br />
+                <a href="/usuarios/{{ .ID }}">{{ .Nick }}</a><br />
                 {{ else }}
                 <div class="text-muted text-center">
                     <h1>Nenhum seguidor por enquanto</h1>
