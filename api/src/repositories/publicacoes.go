@@ -108,8 +108,9 @@ func (repositorio Publicacoes) Buscar(usuarioID uint64) ([]models.Publicacao, er
     INNER JOIN usuarios u
       ON u.id = p.autor_id
     LEFT OUTER JOIN seguidores s
-      ON p.autor_id = s.usuario_id
-    WHERE u.id = ?
+      ON s.usuario_id  = p.autor_id
+	 AND s.bloqueado = 0
+    WHERE p.autor_id = ?
        OR s.seguidor_id = ?
     ORDER BY 1 DESC`, usuarioID, usuarioID, usuarioID, usuarioID)
 
