@@ -1,6 +1,7 @@
 package cookies
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 	"webapp/src/config"
@@ -45,6 +46,8 @@ func Ler(r *http.Request) (map[string]string, error) {
 	if erro != nil {
 		return nil, erro
 	}
+
+	fmt.Println(cookie)
 
 	valores := make(map[string]string)
 
