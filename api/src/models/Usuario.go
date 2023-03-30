@@ -11,13 +11,14 @@ import (
 
 // Usuario representa um usuário utilkizando a rede social
 type Usuario struct {
-	ID        uint64    `json:"id,omitempty"`
-	Nome      string    `json:"nome,omitempty"`
-	Nick      string    `json:"nick,omitempty"`
-	Email     string    `json:"email,omitempty"`
-	Senha     string    `json:"senha,omitempty"`
-	CriadoEm  time.Time `json:"CriadoEm,omitempty"`
-	Bloqueado uint8     `json:"bloqueado,omitempty"`
+	ID                   uint64    `json:"id,omitempty"`
+	Nome                 string    `json:"nome,omitempty"`
+	Nick                 string    `json:"nick,omitempty"`
+	Email                string    `json:"email,omitempty"`
+	Senha                string    `json:"senha,omitempty"`
+	CriadoEm             time.Time `json:"CriadoEm,omitempty"`
+	Bloqueado            uint8     `json:"bloqueado,omitempty"`
+	BloqueadoPeloSeguido uint8     `json:"bloqueadoPeloSeguido,omitempty"`
 }
 
 // Preparar faz ajustes no registro de usuário
