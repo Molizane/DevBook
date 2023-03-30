@@ -66,6 +66,13 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 func BuscarUsuarios(w http.ResponseWriter, r *http.Request) {
 	nomeOuNick := strings.ToLower(r.URL.Query().Get("usuario"))
 
+	usuarioIDNoToken, erro := autenticacao.ExtrairUsuarioID(r)
+
+	if erro != nil {
+		respostas.Erro(w, http.StatusUnauthorized, erro)
+		return
+	}
+
 	db, erro := banco.Conectar()
 
 	if erro != nil {
@@ -76,7 +83,7 @@ func BuscarUsuarios(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	repositorio := repositories.NovoRepositorioDeUsuarios(db)
-	usuarios, erro := repositorio.Buscar(nomeOuNick)
+	usuarios, erro := repositorio.Buscar(nomeOuNick, usuarioIDNoToken)
 
 	if erro != nil {
 		respostas.Erro(w, http.StatusInternalServerError, erro)
@@ -97,6 +104,14 @@ func BuscarUsuarioPorId(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	usuarioIDNoToken, erro := autenticacao.ExtrairUsuarioID(r)
+
+	if erro != nil {
+		respostas.Erro(w, http.StatusUnauthorized, erro)
+		return
+	}
+
+
 	db, erro := banco.Conectar()
 
 	if erro != nil {
@@ -107,7 +122,7 @@ func BuscarUsuarioPorId(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	repositorio := repositories.NovoRepositorioDeUsuarios(db)
-	usuario, erro := repositorio.BuscarPorID(usuarioID)
+	usuario, erro := repositorio.BuscarPorID(usuarioID, usuarioIDNoToken)
 
 	if erro != nil {
 		respostas.Erro(w, http.StatusInternalServerError, erro)

@@ -21,7 +21,6 @@ type Usuario struct {
 	Seguindo             []Usuario    `json:"seguindo"`
 	Publicacoes          []Publicacao `json:"publicacoes"`
 	Bloqueado            int8         `json:"bloqueado"`
-	BloqueadoPeloSeguido uint8        `json:"bloqueadoPeloSeguido,omitempty"`
 }
 
 // BuscarUsuarioCompleto faz 4 requisiçoes na API para montar o usuário

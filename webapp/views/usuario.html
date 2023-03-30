@@ -13,13 +13,9 @@
     {{ template "cabecalho" }}
 
     {{ $seguidoPeloUsuarioLogado := false }}
-    {{ $bloqueadoPeloUsuarioSeguido := false }}
     {{ range .Usuario.Seguidores }}
     {{ if (eq .ID $.UsuarioLogadoID) }}
     {{ $seguidoPeloUsuarioLogado = true }}
-    {{ end }}
-    {{ if (eq .BloqueadoPeloSeguido 1) }}
-    {{ $bloqueadoPeloUsuarioSeguido = true }}
     {{ end }}
     {{ end }}
     {{ $seguindoUsuarioLogado := false }}
@@ -56,7 +52,6 @@
                             </a>
                         </p>
 
-                        {{ if (eq $bloqueadoPeloUsuarioSeguido false) }}
                         <a href="#" class="card-link">
                             {{ if $seguidoPeloUsuarioLogado }}
                             <button id="parar-de-seguir" class="btn btn-info" data-usuario-id="{{ .Usuario.ID }}">Parar
@@ -65,7 +60,6 @@
                             <button id="seguir" class="btn btn-info" data-usuario-id="{{ .Usuario.ID }}">Seguir</button>
                             {{ end }}
                         </a>
-                        {{ end }}
                         {{ if $seguindoUsuarioLogado }}
                         <a href="#" class="card-link">
                             {{ if $usuarioBloqueado }}

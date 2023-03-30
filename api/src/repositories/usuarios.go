@@ -43,16 +43,19 @@ func (repositorio usuarios) Criar(usuario models.Usuario) (uint64, error) {
 }
 
 // Buscar traz todos os usuários que atendem a um filtro de nome ou nick
-func (repositorio usuarios) Buscar(nomeOuNick string) ([]models.Usuario, error) {
+func (repositorio usuarios) Buscar(nomeOuNick string, usuarioLogado uint64) ([]models.Usuario, error) {
 	nomeOuNick = fmt.Sprintf("%%%s%%", nomeOuNick)
 
 	linhas, erro := repositorio.db.Query(`
-	    SELECT id, nome, nick, email, criadoEm
-		FROM usuarios
-		WHERE nome LIKE ?
-		   OR nick LIKE ?
-		ORDER BY nome`,
-		nomeOuNick, nomeOuNick,
+	    SELECT u.id, u.nome, u.nick, u.email, u.criadoEm
+		FROM usuarios u
+        LEFT OUTER JOIN seguidores s
+          ON s.usuario_id = u.id
+         AND s.seguidor_id = ?
+		WHERE (u.nome LIKE ? OR u.nick LIKE ?)
+		  AND COALESCE(s.bloqueado, 0) = 0
+		ORDER BY u.nome`,
+		usuarioLogado, nomeOuNick, nomeOuNick,
 	)
 
 	if erro != nil {
@@ -83,12 +86,15 @@ func (repositorio usuarios) Buscar(nomeOuNick string) ([]models.Usuario, error) 
 }
 
 // Buscar traz todos os usuários que atendem a um filtro de nome ou nick
-func (repositorio usuarios) BuscarPorID(ID uint64) (models.Usuario, error) {
+func (repositorio usuarios) BuscarPorID(ID, usuarioLogado uint64) (models.Usuario, error) {
 	linhas, erro := repositorio.db.Query(`
-	    SELECT id, nome, nick, email, criadoEm
-		FROM usuarios
-		WHERE id = ?`,
-		ID,
+	    SELECT u.id, u.nome, u.nick, u.email, u.criadoEm
+		FROM usuarios u
+        LEFT OUTER JOIN seguidores s
+          ON s.usuario_id = u.id
+         AND s.seguidor_id = ?
+		WHERE u.id = ?`,
+		usuarioLogado, ID,
 	)
 
 	if erro != nil {
@@ -209,15 +215,15 @@ func (repositorio usuarios) PararDeSeguir(usuarioID, seguidorID uint64) error {
 func (repositorio usuarios) BuscarSeguidores(usuarioID, usuarioLogado uint64) ([]models.Usuario, error) {
 	linhas, erro := repositorio.db.Query(`
 		 SELECT DISTINCT u.id, u.nome, u.nick, u.email, u.criadoEm,
-		        CASE WHEN ? = ? THEN s.bloqueado ELSE 0 END AS bloqueado,
-                COALESCE(s2.bloqueado, 0) AS bloqueadoPeloSeguido
+		        CASE WHEN ? = ? THEN s.bloqueado ELSE 0 END AS bloqueado
 		 FROM seguidores s
 		 INNER JOIN usuarios u
-		 ON u.id = s.seguidor_id
+		   ON u.id = s.seguidor_id
          LEFT OUTER JOIN seguidores s2
-         ON s2.usuario_id = s.usuario_id
-         AND s2.seguidor_id = ?
-		 WHERE s.usuario_id = ?`,
+           ON s2.usuario_id = s.usuario_id
+          AND s2.seguidor_id = ?
+		 WHERE s.usuario_id = ?
+	       AND COALESCE(s2.bloqueado, 0) = 0`,
 		usuarioLogado, usuarioID, usuarioLogado, usuarioID,
 	)
 
@@ -239,7 +245,6 @@ func (repositorio usuarios) BuscarSeguidores(usuarioID, usuarioLogado uint64) ([
 			&usuario.Email,
 			&usuario.CriadoEm,
 			&usuario.Bloqueado,
-			&usuario.BloqueadoPeloSeguido,
 		); erro != nil {
 			return nil, erro
 		}
@@ -256,9 +261,9 @@ func (repositorio usuarios) BuscarSeguindo(usuarioID, usuarioLogado uint64) ([]m
 		 SELECT DISTINCT u.id, u.nome, u.nick, u.email, u.criadoEm, s.bloqueado
 		 FROM seguidores s
 		 INNER JOIN usuarios u
-		 ON u.id = s.usuario_id
+		   ON u.id = s.usuario_id
 		 WHERE s.seguidor_id = ?
-		 AND (? <> ? OR s.bloqueado = 0)`,
+		   AND (? <> ? OR s.bloqueado = 0)`,
 		usuarioID, usuarioID, usuarioLogado,
 	)
 

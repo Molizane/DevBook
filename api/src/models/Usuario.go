@@ -18,7 +18,6 @@ type Usuario struct {
 	Senha                string    `json:"senha,omitempty"`
 	CriadoEm             time.Time `json:"CriadoEm,omitempty"`
 	Bloqueado            uint8     `json:"bloqueado,omitempty"`
-	BloqueadoPeloSeguido uint8     `json:"bloqueadoPeloSeguido,omitempty"`
 }
 
 // Preparar faz ajustes no registro de usuário
