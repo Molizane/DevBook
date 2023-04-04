@@ -26,4 +26,5 @@ func main() {
 
 	fmt.Printf("API rodando na porta %d\n", config.Porta)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.Porta), r))
+	//log.Fatal(http.ListenAndServeTLS(fmt.Sprintf(":%d", config.Porta), "devbook-api.crt", "devbook-api.key", r))
 }
