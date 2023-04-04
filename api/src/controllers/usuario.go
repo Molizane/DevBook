@@ -111,7 +111,6 @@ func BuscarUsuarioPorId(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	db, erro := banco.Conectar()
 
 	if erro != nil {
