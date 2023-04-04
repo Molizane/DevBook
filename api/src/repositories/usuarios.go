@@ -220,7 +220,7 @@ func (repositorio usuarios) BuscarSeguidores(usuarioID, usuarioLogado uint64) ([
 		 INNER JOIN usuarios u
 		   ON u.id = s.seguidor_id
          LEFT OUTER JOIN seguidores s2
-           ON s2.usuario_id = s.usuario_id
+           ON s2.usuario_id = s.seguidor_id
           AND s2.seguidor_id = ?
 		 WHERE s.usuario_id = ?
 	       AND COALESCE(s2.bloqueado, 0) = 0`,
