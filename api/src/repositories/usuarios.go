@@ -3,6 +3,7 @@ package repositories
 import (
 	"api/src/models"
 	"database/sql"
+	"errors"
 	"fmt"
 )
 
@@ -17,6 +18,35 @@ func NovoRepositorioDeUsuarios(db *sql.DB) *usuarios {
 
 // Criar insere um usuário no banco de dados
 func (repositorio usuarios) Criar(usuario models.Usuario) (uint64, error) {
+	linhas, erro := repositorio.db.Query(`
+	    SELECT COUNT(1)
+		FROM usuarios u
+		WHERE u.nome = ?
+		   OR u.nick = ?
+		   OR u.email = ?`,
+		usuario.Nome, usuario.Nick, usuario.Email,
+	)
+
+	if erro != nil {
+		return 0, erro
+	}
+
+	defer linhas.Close()
+
+	qt := 0
+
+	if linhas.Next() {
+		if erro = linhas.Scan(
+			&qt,
+		); erro != nil {
+			return 0, erro
+		}
+	}
+
+	if qt != 0 {
+		return 0, errors.New("já existe um usuário com o mesmo nome ou nick ou e-mail")
+	}
+
 	statement, erro := repositorio.db.Prepare(
 		"INSERT INTO usuarios (nome, nick, email, senha) VALUES (?, ?, ?, ?)",
 	)
@@ -122,6 +152,36 @@ func (repositorio usuarios) BuscarPorID(ID, usuarioLogado uint64) (models.Usuari
 
 // Atualizar altera as informações de um usuário no banco de dados
 func (repositorio usuarios) Atualizar(ID uint64, usuario models.Usuario) error {
+	linhas, erro := repositorio.db.Query(`
+	    SELECT COUNT(1)
+		FROM usuarios u
+		WHERE id <> ?
+		  AND (u.nome = ?
+		       OR u.nick = ?
+		       OR u.email = ?)`,
+		ID, usuario.Nome, usuario.Nick, usuario.Email,
+	)
+
+	if erro != nil {
+		return erro
+	}
+
+	defer linhas.Close()
+
+	qt := 0
+
+	if linhas.Next() {
+		if erro = linhas.Scan(
+			&qt,
+		); erro != nil {
+			return erro
+		}
+	}
+
+	if qt != 0 {
+		return errors.New("já existe um usuário com o mesmo nome ou nick ou e-mail")
+	}
+
 	statement, erro := repositorio.db.Prepare(`
 	  UPDATE usuarios
 	  SET nome = ?, nick = ?, email = ?
