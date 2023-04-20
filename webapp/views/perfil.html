@@ -13,7 +13,7 @@
     {{ template "cabecalho" }}
 
     <div class="row mt-4">
-        <div class="col-12">
+        <div class="col-12 ml-3">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Meu Perfil</h5>
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div class="row mt-4">
+    <div class="row mt-4 ml-3">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Minhas Publicações</h5>
@@ -64,11 +64,18 @@
         </div>
     </div>
 
-    <a id="deletar-usuario" class="card-link">
-        <button class="btn btn-info">
-            Excluir conta permanentemente
-        </button>
-    </a>
+    <!-- <div style="margin-top:10px;margin-left:12px;"> -->
+    <div class="row mt-2 ml-3 align-items-end">
+        <div class="col">
+            <a id="deletar-usuario" class="mt-2">
+                <button class="btn btn-info">
+                    Excluir conta permanentemente
+                </button>
+            </a>
+        </div>
+        <div class="col"></div>
+        <div class="col"></div>
+        </div>
 
     {{ template "rodape" }}
 
